@@ -7,12 +7,12 @@ import (
 )
 
 type UserParam struct {
-	UserName string `json:"username"`
-	PassWord string `json:"password"`
+	UserName string `json:"username" query:"username"`
+	PassWord string `json:"password" query:"password"`
 }
 
 type RegisterResponse struct {
-	Code    int64  `json:"status_code"`
+	Code    int64  `json:"status_code" `
 	Message string `json:"status_msg"`
 	ID      int64  `json:"user_id"`
 	Token   string `json:"token"`

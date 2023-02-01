@@ -15,7 +15,7 @@ func Init() {
 func main() {
 	Init()
 	r := server.New(
-		server.WithHostPorts("192.168.50.254:8080"),
+		server.WithHostPorts("0.0.0.0:8080"),
 		server.WithHandleMethodNotAllowed(true),
 	)
 	douyin := r.Group("/douyin")
