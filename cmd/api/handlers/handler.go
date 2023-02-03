@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"mime/multipart"
 	"miniTikTok/pkg/errno"
 )
 
@@ -72,5 +73,77 @@ func SendInfoResponse(c *app.RequestContext, err error, user User) {
 		Code:    int64(Err.ErrCode),
 		Message: Err.ErrMsg,
 		User:    user,
+	})
+}
+
+type PublishParam struct {
+	//绑定文件
+	//https://www.cloudwego.io/zh/docs/hertz/tutorials/basic-feature/binding-and-validate/
+	Data  *multipart.FileHeader `json:"data,omitempty" form:"data" query:"data"`
+	Token string                `json:"token,omitempty" form:"token" query:"token"`
+	Title string                `json:"title,omitempty" form:"title" query:"title"`
+}
+
+type PublishResponse struct {
+	Code    int64  `json:"status_code"`
+	Message string `json:"status_msg"`
+}
+
+func SendPublishResponse(c *app.RequestContext, err error) {
+	Err := errno.ConvertErr(err)
+	c.JSON(consts.StatusOK, PublishResponse{
+		Code:    int64(Err.ErrCode),
+		Message: Err.ErrMsg,
+	})
+}
+
+type ListParam struct {
+	ID    string `json:"user_id" form:"user_id" query:"user_id"`
+	Token string `json:"token" form:"token" query:"token"`
+}
+
+type Video struct {
+	ID            int64  `json:"id"`
+	Author        User   `json:"author"`
+	PlayUrl       string `json:"play_url"`
+	CoverUrl      string `json:"cover_url"`
+	FavoriteCount int64  `json:"favorite_count"`
+	CommentCount  int64  `json:"comment_count"`
+	IsFavorite    bool   `json:"is_favorite"`
+	Title         string `json:"title"`
+}
+
+type VideoListResponse struct {
+	Code      int64   `json:"status_code"`
+	Message   string  `json:"status_msg"`
+	VideoList []Video `json:"video_list"`
+}
+
+func SendListResponse(c *app.RequestContext, videoList []Video, err error) {
+	Err := errno.ConvertErr(err)
+	c.JSON(consts.StatusOK, FeedResponse{
+		Code:      int64(Err.ErrCode),
+		Message:   Err.ErrMsg,
+		VideoList: videoList,
+	})
+}
+
+type FeedParam struct {
+	LatestTime string `json:"latest_time" query:"latest_time" form:"latest_time"`
+	Token      string `json:"token" query:"token" form:"token"`
+}
+
+type FeedResponse struct {
+	Code      int64   `json:"status_code"`
+	Message   string  `json:"status_msg"`
+	VideoList []Video `json:"video_list"`
+}
+
+func SendFeedResponse(c *app.RequestContext, videoList []Video, err error) {
+	Err := errno.ConvertErr(err)
+	c.JSON(consts.StatusOK, FeedResponse{
+		Code:      int64(Err.ErrCode),
+		Message:   Err.ErrMsg,
+		VideoList: videoList,
 	})
 }

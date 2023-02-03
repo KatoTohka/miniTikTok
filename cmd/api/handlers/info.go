@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"miniTikTok/cmd/api/rpc"
 	"miniTikTok/kitex_gen/user"
 	"miniTikTok/middleware"
@@ -11,6 +12,7 @@ import (
 )
 
 func Info(ctx context.Context, c *app.RequestContext) {
+	hlog.Info("info log")
 	var infoVar UserInfoParam
 	if err := c.Bind(&infoVar); err != nil {
 		SendInfoResponse(c, errno.ConvertErr(err), User{})

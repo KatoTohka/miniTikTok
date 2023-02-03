@@ -27,6 +27,9 @@ const (
 	UserAlreadyExistErrCode    = 10003
 	AuthorizationFailedErrCode = 10004
 	UserNotExistErrCode        = 10005
+	PublishErrCode             = 10006
+	UploadErrCode              = 10007
+	InsertErrCode              = 10008
 )
 
 type ErrNo struct {
@@ -54,6 +57,9 @@ var (
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	UserNotExistErr        = NewErrNo(UserNotExistErrCode, "User not exist")
+	PublishErr             = NewErrNo(PublishErrCode, "publish err")
+	UploadErr              = NewErrNo(UploadErrCode, "tos upload err")
+	InsertErr              = NewErrNo(InsertErrCode, "insert database err")
 )
 
 // ConvertErr convert error to Errno
