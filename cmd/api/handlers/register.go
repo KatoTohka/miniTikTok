@@ -3,12 +3,14 @@ package handlers
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"miniTikTok/cmd/api/rpc"
 	"miniTikTok/kitex_gen/user"
 	"miniTikTok/pkg/errno"
 )
 
 func Register(ctx context.Context, c *app.RequestContext) {
+	hlog.Info("register log")
 	var registerVar UserParam
 	if err := c.Bind(&registerVar); err != nil {
 		SendRegisterResponse(c, errno.ConvertErr(err), -1, "")

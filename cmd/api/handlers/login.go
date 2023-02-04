@@ -3,12 +3,14 @@ package handlers
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"miniTikTok/cmd/api/rpc"
 	"miniTikTok/kitex_gen/user"
 	"miniTikTok/pkg/errno"
 )
 
 func Login(ctx context.Context, c *app.RequestContext) {
+	hlog.Info("login log")
 	var loginVar UserParam
 	if err := c.Bind(&loginVar); err != nil {
 		SendLoginResponse(c, errno.ConvertErr(err), -1, "")
