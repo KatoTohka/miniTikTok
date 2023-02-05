@@ -23,6 +23,8 @@ const (
 	VideoTableName = "video"
 	UserTableName  = "user"
 
+	LimitQuery = 30
+
 	IdentityKey              = "id"
 	Total                    = "total"
 	Notes                    = "notes"
@@ -31,15 +33,17 @@ const (
 	NoteServiceName          = "demonote"
 	UserServiceName          = "user"
 	VideoServiceName         = "video"
+	FeedServiceName          = "feed"
 	MySQLDefaultDSN          = "tiktok:tiktok@tcp(localhost:9910)/tiktok?charset=utf8&parseTime=True&loc=Local"
 	EtcdAddress              = "127.0.0.1:2379"
 	UserServerHost           = "127.0.0.1:7777"
 	VideoServerHost          = "127.0.0.1:7778"
+	FeedServerHost           = "127.0.0.1:7779"
 	CPURateLimit     float64 = 80.0
 	DefaultLimit             = 10
 
 	TosAccessKey = "g2EfdHBkRt12iIUIOwWZ3_C5JXtx9OIQtL25JLdJ"
 	TosSecretKey = "o36ZBDOqHGwymF-eDddH7Pg6stHvbpnTh9gemjPC"
 	TosBucket    = "tiktok4396"
-	TosURL       = "http://rp6phmpic.bkt.clouddn.com"
+	TosURL       = "http://rp6phmpic.bkt.clouddn.com/"
 )

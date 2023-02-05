@@ -1,5 +1,5 @@
 syntax = "proto3";
-package video;
+package feed;
 option go_package = "feed";
 
 message douyin_feed_request {

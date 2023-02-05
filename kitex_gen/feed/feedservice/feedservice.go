@@ -25,7 +25,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"Feed": kitex.NewMethodInfo(feedHandler, newFeedArgs, newFeedResult, false),
 	}
 	extra := map[string]interface{}{
-		"PackageName": "video",
+		"PackageName": "feed",
 	}
 	svcInfo := &kitex.ServiceInfo{
 		ServiceName:     serviceName,
