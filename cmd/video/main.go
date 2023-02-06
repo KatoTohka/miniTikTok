@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/cloudwego/kitex/pkg/limit"
-	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	"github.com/cloudwego/kitex/server"
-	etcd "github.com/kitex-contrib/registry-etcd"
 	"log"
 	"miniTikTok/cmd/video/dal"
 	video "miniTikTok/kitex_gen/video/videoservice"
 	"miniTikTok/pkg/constants"
 	"net"
+
+	"github.com/cloudwego/kitex/pkg/limit"
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/cloudwego/kitex/server"
+	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 func Init() {
