@@ -38,7 +38,7 @@ func NewSnowflake(workerId int64) (*SnowFlake, error) {
 	}, nil
 }
 
-func (s *SnowFlake) Generate() int64 {
+func (s *SnowFlake) Generate() uint {
 	s.Lock()
 	now := time.Now().UnixNano() / 1000000
 	//fmt.Println(now << timestampShift)
@@ -53,7 +53,7 @@ func (s *SnowFlake) Generate() int64 {
 		s.sequence = 0
 	}
 	s.timestamp = now
-	r := int64((now-0)<<timestampShift | (s.workerId << workIdShift) | (s.sequence))
+	r := uint((now-0)<<timestampShift | (s.workerId << workIdShift) | (s.sequence))
 	s.Unlock()
 	return r
 }

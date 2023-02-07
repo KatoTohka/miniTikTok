@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-var feedclient feedservice.Client
+var feedClient feedservice.Client
 
 func initFeedRpc() {
 	r, err := etcd.NewEtcdResolver([]string{constants.EtcdAddress})
@@ -33,11 +33,11 @@ func initFeedRpc() {
 	if err != nil {
 		panic(err)
 	}
-	feedclient = c
+	feedClient = c
 }
 
 func Feed(ctx context.Context, req *feed.DouyinFeedRequest) ([]*feed.Video, error) {
-	resp, err := feedclient.Feed(ctx, req)
+	resp, err := feedClient.Feed(ctx, req)
 	if err != nil {
 		return []*feed.Video{}, err
 	}
