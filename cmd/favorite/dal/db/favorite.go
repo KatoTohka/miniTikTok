@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"miniTikTok/pkg/constants"
 
@@ -30,16 +29,14 @@ func CreateFavorite(ctx context.Context, favorite *Favorite) error {
 
 // SetFavorite set favorite status to 0
 func SetFavorite(ctx context.Context, favorite *Favorite) error {
-	res := Favorite{}
-	if err := DB.Where("user_id = ? AND video_id = ?", fmt.Sprint(favorite.UserId), fmt.Sprint(favorite.VideoId)).Find(&res).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			if err = CreateFavorite(ctx, favorite); err != nil {
-				return err
-			}
-			return nil
-		}
-	}
-	if err := DB.Model(&res).Update("status", "0").Error; err != nil {
+	// res := Favorite{}
+	// if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).FirstOrCreate(&res).Error; err != nil {
+	// 	return err
+	// }
+	// if err := DB.Model(&res).Update("status", "0").Error; err != nil {
+	// 	return err
+	// }
+	if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).Assign(Favorite{Status: false}).FirstOrCreate(&Favorite{}).Error; err != nil {
 		return err
 	}
 	return nil
@@ -47,7 +44,10 @@ func SetFavorite(ctx context.Context, favorite *Favorite) error {
 
 // CancelFavorite set favorite status to 1
 func CancelFavorite(ctx context.Context, favorite *Favorite) error {
-	if err := DB.Model(favorite).Update("status", "1").Error; err != nil {
+	// if err := DB.Model(favorite).Update("status", "1").Error; err != nil {
+	// 	return err
+	// }
+	if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).Assign(Favorite{Status: true}).FirstOrCreate(&Favorite{}).Error; err != nil {
 		return err
 	}
 	return nil

@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"mime/multipart"
 	"miniTikTok/pkg/errno"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 type UserParam struct {
@@ -142,6 +143,45 @@ type FeedResponse struct {
 func SendFeedResponse(c *app.RequestContext, videoList []Video, err error) {
 	Err := errno.ConvertErr(err)
 	c.JSON(consts.StatusOK, FeedResponse{
+		Code:      int64(Err.ErrCode),
+		Message:   Err.ErrMsg,
+		VideoList: videoList,
+	})
+}
+
+type FavoriteActionParam struct {
+	Token      string `json:"token" form:"token" query:"token"`
+	VideoID    string `json:"video_id" form:"video_id" query:"video_id"`
+	ActionType string `json:"action_type" form:"action_type" query:"action_type"`
+}
+
+type FavoriteActionResponse struct {
+	Code    int64  `json:"status_code"`
+	Message string `json:"status_msg"`
+}
+
+func SendFavoriteActionResponse(c *app.RequestContext, err error) {
+	Err := errno.ConvertErr(err)
+	c.JSON(consts.StatusOK, FavoriteActionResponse{
+		Code:    int64(Err.ErrCode),
+		Message: Err.ErrMsg,
+	})
+}
+
+type FavoriteListParam struct {
+	ID    string `json:"user_id" form:"user_id" query:"user_id"`
+	Token string `json:"token" form:"token" query:"token"`
+}
+
+type FavoriteListResponse struct {
+	Code      int64   `json:"status_code"`
+	Message   string  `json:"status_msg"`
+	VideoList []Video `json:"video_list"`
+}
+
+func SendFavoriteListResponse(c *app.RequestContext, videoList []Video, err error) {
+	Err := errno.ConvertErr(err)
+	c.JSON(consts.StatusOK, FavoriteListResponse{
 		Code:      int64(Err.ErrCode),
 		Message:   Err.ErrMsg,
 		VideoList: videoList,

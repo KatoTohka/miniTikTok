@@ -45,6 +45,8 @@ const (
 	CPURateLimit        float64 = 80.0
 	DefaultLimit                = 10
 
+	TempCachePlace = "/home/ye/miniTikTok/videoImage/"
+
 	TosAccessKey = "g2EfdHBkRt12iIUIOwWZ3_C5JXtx9OIQtL25JLdJ"
 	TosSecretKey = "o36ZBDOqHGwymF-eDddH7Pg6stHvbpnTh9gemjPC"
 	TosBucket    = "tiktok4396"

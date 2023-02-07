@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
-	hertzZerolog "github.com/hertz-contrib/logger/zerolog"
 	"miniTikTok/cmd/api/handlers"
 	"miniTikTok/cmd/api/rpc"
 	"miniTikTok/pkg/tracer"
 	"os"
+
+	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	hertzZerolog "github.com/hertz-contrib/logger/zerolog"
 )
 
 func Init() {
@@ -40,5 +41,8 @@ func main() {
 	publishGroup.GET("/list/", handlers.VideoList)
 	feedGroup := douyin.Group("/feed/")
 	feedGroup.GET("/", handlers.Feed)
+	favoriteGroup := douyin.Group("/favorite")
+	favoriteGroup.POST("/action/", handlers.FavoriteAction)
+	favoriteGroup.GET("/list/", handlers.FavoriteList)
 	r.Spin()
 }
