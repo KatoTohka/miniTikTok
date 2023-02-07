@@ -35,6 +35,7 @@ const (
 	VideoServerHost            = "127.0.0.1:7778"
 	FeedServerHost             = "127.0.0.1:7779"
 	CommentServerHost          = "127.0.0.1:7780"
+  FavoriteServerHost         = "127.0.0.1:7781"
 	CPURateLimit       float64 = 80.0
 	DefaultLimit               = 10
 

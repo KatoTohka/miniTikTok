@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"miniTikTok/cmd/video/dal"
-	video "miniTikTok/kitex_gen/video/videoservice"
+	"miniTikTok/cmd/favorite/dal"
+	favorite "miniTikTok/kitex_gen/favorite/favoriteservice"
 	"miniTikTok/pkg/constants"
 	"net"
 
@@ -23,12 +23,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err, "etcd registry error")
 	}
-	addr, err := net.ResolveTCPAddr("tcp", constants.VideoServerHost)
+	addr, err := net.ResolveTCPAddr("tcp", constants.FavoriteServerHost)
 	if err != nil {
 		log.Fatal(err, "net resolve error")
 	}
-	svr := video.NewServer(new(VideoServiceImpl),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constants.VideoServiceName}), // server name
+	svr := favorite.NewServer(new(FavoriteServiceImpl),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constants.FavoriteServiceName}), // server name
 		//server.WithMiddleware(middleware.CommonMiddleware),                                             // middleware
 		//server.WithMiddleware(middleware.ServerMiddleware),
 		server.WithServiceAddr(addr),                                       // address

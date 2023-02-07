@@ -30,6 +30,9 @@ const (
 	PublishErrCode             = 10006
 	UploadErrCode              = 10007
 	InsertErrCode              = 10008
+	BadReqErrCode              = 10009
+	ActionFavoriteErrCode      = 10010
+	ListFavoriteErrCode        = 10011
 )
 
 type ErrNo struct {
@@ -60,6 +63,9 @@ var (
 	PublishErr             = NewErrNo(PublishErrCode, "publish err")
 	UploadErr              = NewErrNo(UploadErrCode, "tos upload err")
 	InsertErr              = NewErrNo(InsertErrCode, "insert database err")
+	BadReqErr              = NewErrNo(BadReqErrCode, "bad request err")
+	ActionFavoriteErr      = NewErrNo(ActionFavoriteErrCode, "action favorite err")
+	ListFavoriteErr        = NewErrNo(ListFavoriteErrCode, "list favorite err")
 )
 
 // ConvertErr convert error to Errno
