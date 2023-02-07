@@ -31,7 +31,6 @@ func (s *VideoServiceImpl) ListVideo(ctx context.Context, req *video.DouyinPubli
 	var resp video.DouyinPublishListResponse
 	// true call register
 	videoList, err := service.NewVideoListService(ctx).ListVideo(req)
-
 	status := "VideoListErr"
 	if err != nil {
 		resp.StatusCode = -1

@@ -40,5 +40,9 @@ func main() {
 	publishGroup.GET("/list/", handlers.VideoList)
 	feedGroup := douyin.Group("/feed/")
 	feedGroup.GET("/", handlers.Feed)
+	commentGroup := douyin.Group("/comment")
+	commentGroup.POST("/action/", handlers.Comment)
+	commentGroup.GET("/list/", handlers.CommentList)
+	//commentGroup.GET("/list/", handlers.CommentList)
 	r.Spin()
 }

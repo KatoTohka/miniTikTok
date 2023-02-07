@@ -147,3 +147,53 @@ func SendFeedResponse(c *app.RequestContext, videoList []Video, err error) {
 		VideoList: videoList,
 	})
 }
+
+type CommentParam struct {
+	Token       string `json:"token" query:"token" form:"token"`
+	VideoID     string `json:"video_id" query:"video_id" form:"video_id"`
+	ActionType  string `json:"action_type" query:"action_type" form:"action_type"`
+	CommentText string `json:"comment_text" query:"comment_text" form:"comment_text"`
+	ID          string `json:"comment_id" query:"comment_id" form:"comment_id"`
+}
+
+type Comments struct {
+	ID         int64  `json:"id"`
+	User       User   `json:"user"`
+	Content    string `json:"content"`
+	CreateDate string `json:"create_date"`
+}
+
+type CommentResponse struct {
+	Code    int64    `json:"status_code"`
+	Message string   `json:"status_msg"`
+	Comment Comments `json:"comment"`
+}
+
+func SendCommentResponse(c *app.RequestContext, cmt Comments, err error) {
+	Err := errno.ConvertErr(err)
+	c.JSON(consts.StatusOK, CommentResponse{
+		Code:    int64(Err.ErrCode),
+		Message: Err.ErrMsg,
+		Comment: cmt,
+	})
+}
+
+type CommentListParam struct {
+	Token   string `json:"token" query:"token" form:"token"`
+	VideoID string `json:"video_id" query:"video_id" form:"video_id"`
+}
+
+type CommentListResponse struct {
+	Code        int64      `json:"status_code"`
+	Message     string     `json:"status_msg"`
+	CommentList []Comments `json:"comment_list"`
+}
+
+func SendCommentListResponse(c *app.RequestContext, cmtList []Comments, err error) {
+	Err := errno.ConvertErr(err)
+	c.JSON(consts.StatusOK, CommentListResponse{
+		Code:        int64(Err.ErrCode),
+		Message:     Err.ErrMsg,
+		CommentList: cmtList,
+	})
+}

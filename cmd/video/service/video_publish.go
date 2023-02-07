@@ -41,7 +41,7 @@ func (s *VideoPublishService) PublishVideo(req *video.DouyinPublishActionRequest
 	go func(err error) {
 		defer wg.Done()
 		// 协程处理视频帧
-		err = cache.Cache(data, videoId)
+		err = cache.Cache(data, int64(videoId))
 		if err != nil {
 			return
 		}
