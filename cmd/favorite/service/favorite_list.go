@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"miniTikTok/cmd/favorite/dal/db"
 	"miniTikTok/kitex_gen/favorite"
 	"miniTikTok/pkg/errno"
@@ -54,5 +55,10 @@ func (s *FavoriteListService) ListFavorite(req *favorite.DouyinFavoriteListReque
 			Title:         tmpVideo.Title,
 		})
 	}
+	ids := make([]int64, 0)
+	for _, v := range videos {
+		ids = append(ids, v.Id)
+	}
+	fmt.Println(ids)
 	return videos, nil
 }

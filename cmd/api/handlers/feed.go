@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"miniTikTok/cmd/api/rpc"
 	"miniTikTok/kitex_gen/feed"
 	"miniTikTok/pkg/errno"
 	"time"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 )
 
 func convertVideoType2(videoList []*feed.Video) (resp []Video) {
@@ -27,7 +28,7 @@ func convertVideoType2(videoList []*feed.Video) (resp []Video) {
 			CoverUrl:      (*v).CoverUrl,
 			FavoriteCount: (*v).FavoriteCount,
 			CommentCount:  (*v).CommentCount,
-			IsFavorite:    false,
+			IsFavorite:    (*v).IsFavorite,
 			Title:         (*v).Title,
 		}
 		resp = append(resp, tv)
@@ -56,9 +57,16 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 		}
 	}
 	//log.Println(feedTime)
+	//判断是否存在Token,用于Feed提取user判断favorite
+	var token *string
+	if len(feedVar.Token) == 0 {
+		token = nil
+	} else {
+		token = &feedVar.Token
+	}
 	videos, err := rpc.Feed(context.Background(), &feed.DouyinFeedRequest{
 		LatestTime: &feedTime,
-		Token:      nil,
+		Token:      token,
 	})
 	if err != nil {
 		SendFeedResponse(c, []Video{}, errno.ConvertErr(err))
