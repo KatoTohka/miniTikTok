@@ -10,9 +10,9 @@ import (
 
 type Favorite struct {
 	gorm.Model
-	UserId  int64 `json:"user_id"`
-	VideoId int64 `json:"video_id"`
-	Status  bool  `json:"status"`
+	UserId  int64 `json:"user_id" structs:"user_id"`
+	VideoId int64 `json:"video_id" structs:"video_id"`
+	Status  bool  `json:"status" structs:"status"`
 }
 
 func (f *Favorite) TableName() string {
@@ -36,7 +36,10 @@ func SetFavorite(ctx context.Context, favorite *Favorite) error {
 	// if err := DB.Model(&res).Update("status", "0").Error; err != nil {
 	// 	return err
 	// }
-	if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).Assign(Favorite{Status: false}).FirstOrCreate(&Favorite{}).Error; err != nil {
+	update := map[string]interface{}{
+		"status": 0,
+	}
+	if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).Assign(update).FirstOrCreate(&Favorite{}).Error; err != nil {
 		return err
 	}
 	return nil
