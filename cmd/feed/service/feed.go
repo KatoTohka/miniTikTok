@@ -4,6 +4,7 @@ import (
 	"context"
 	"miniTikTok/cmd/feed/dal/db"
 	"miniTikTok/kitex_gen/feed"
+	"miniTikTok/middleware"
 	"miniTikTok/pkg/constants"
 	"time"
 )
@@ -38,6 +39,20 @@ func (s *FeedService) FeedVideo(req *feed.DouyinFeedRequest) ([]*feed.Video, *in
 		u.Name = users[0].UserName
 		u.FollowCount = &users[0].FollowCount
 		u.FollowerCount = &users[0].FollowerCount
+		//query IsFavorite, check whether the user is online
+		isfav := false
+		if req.Token != nil {
+			token, claim, err := middleware.ParseToken(*req.Token)
+			if err != nil {
+				return nil, req.LatestTime, err
+			}
+			if token.Valid {
+				isfav, err = db.QueryFavoriteStatus(s.ctx, claim.UserID, int64(v.ID))
+				if err != nil {
+					return nil, req.LatestTime, err
+				}
+			}
+		}
 		vd := feed.Video{
 			Id:            int64(v.ID),
 			Author:        &u,
@@ -45,7 +60,7 @@ func (s *FeedService) FeedVideo(req *feed.DouyinFeedRequest) ([]*feed.Video, *in
 			CoverUrl:      v.CoverUrl,
 			FavoriteCount: v.FavoriteCount,
 			CommentCount:  v.CommentCount,
-			IsFavorite:    false,
+			IsFavorite:    !isfav,
 			Title:         v.Title,
 		}
 		resp = append(resp, &vd)

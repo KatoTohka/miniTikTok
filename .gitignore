@@ -1,0 +1,6 @@
+*.sh
+/cmd/comment/output/
+/cmd/favorite/output/
+/cmd/video/output/
+/cmd/user/output/
+/cmd/feed/output

@@ -5,7 +5,6 @@ import (
 	"miniTikTok/cmd/favorite/dal/db"
 	"miniTikTok/kitex_gen/favorite"
 	"miniTikTok/middleware"
-	"miniTikTok/pkg/errno"
 )
 
 type FavoriteActionService struct {
@@ -35,7 +34,7 @@ func (s *FavoriteActionService) ActionFavorite(req *favorite.DouyinFavoriteActio
 			return err
 		}
 		return nil
-	} else if req.ActionType == 2 {
+	} else {
 		if err := db.CancelFavorite(context.Background(), &favorite); err != nil {
 			return err
 		}
@@ -44,7 +43,5 @@ func (s *FavoriteActionService) ActionFavorite(req *favorite.DouyinFavoriteActio
 			return err
 		}
 		return nil
-	} else {
-		return errno.BadReqErr
 	}
 }

@@ -17,27 +17,29 @@ package constants
 
 const (
 	//JWT
-	SecretKey        = "secret key"
-	Issuer           = "douyin"
-	Expire           = 1200
-	VideoTableName   = "video"
-	UserTableName    = "user"
-	CommentTableName = "comment"
-	LimitQuery       = 30
+	SecretKey              = "secret key"
+	Issuer                 = "douyin"
+	Expire                 = 1200
+	VideoTableName         = "video"
+	UserTableName          = "user"
+	CommentTableName       = "comment"
+	UsersFavoriteTableName = "favorite"
+	LimitQuery             = 30
 
-	UserServiceName            = "user"
-	VideoServiceName           = "video"
-	FeedServiceName            = "feed"
-	CommentServiceName         = "comment"
-	MySQLDefaultDSN            = "tiktok:tiktok@tcp(localhost:9910)/tiktok?charset=utf8&parseTime=True&loc=Local"
-	EtcdAddress                = "127.0.0.1:2379"
-	UserServerHost             = "127.0.0.1:7777"
-	VideoServerHost            = "127.0.0.1:7778"
-	FeedServerHost             = "127.0.0.1:7779"
-	CommentServerHost          = "127.0.0.1:7780"
-  FavoriteServerHost         = "127.0.0.1:7781"
-	CPURateLimit       float64 = 80.0
-	DefaultLimit               = 10
+	UserServiceName             = "user"
+	VideoServiceName            = "video"
+	FeedServiceName             = "feed"
+	CommentServiceName          = "comment"
+	FavoriteServiceName         = "favorite"
+	MySQLDefaultDSN             = "tiktok:tiktok@tcp(localhost:9910)/tiktok?charset=utf8&parseTime=True&loc=Local"
+	EtcdAddress                 = "127.0.0.1:2379"
+	UserServerHost              = "127.0.0.1:7777"
+	VideoServerHost             = "127.0.0.1:7778"
+	FeedServerHost              = "127.0.0.1:7779"
+	CommentServerHost           = "127.0.0.1:7780"
+	FavoriteServerHost          = "127.0.0.1:7781"
+	CPURateLimit        float64 = 80.0
+	DefaultLimit                = 10
 
 	TempCachePlace = "/home/ye/miniTikTok/videoImage/"
 
