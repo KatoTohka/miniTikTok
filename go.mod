@@ -4,20 +4,20 @@ go 1.19
 
 require (
 	github.com/cloudwego/fastpb v0.0.3
-	github.com/cloudwego/hertz v0.5.1
+	github.com/cloudwego/hertz v0.5.2
 	github.com/cloudwego/kitex v0.4.4
 	github.com/disintegration/imaging v1.6.2
-	github.com/form3tech-oss/jwt-go v3.2.3+incompatible
-	github.com/hertz-contrib/logger/zerolog v0.0.0-20221227100845-46a8693d7847
+	github.com/form3tech-oss/jwt-go v3.2.5+incompatible
+	github.com/hertz-contrib/logger/zerolog v0.0.0-20230206071608-2de215a9fd50
 	github.com/kitex-contrib/registry-etcd v0.1.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/qiniu/go-sdk/v7 v7.14.0
 	github.com/u2takey/ffmpeg-go v0.4.1
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
-	golang.org/x/net v0.1.0
+	golang.org/x/net v0.7.0
 	google.golang.org/protobuf v1.28.1
-	gorm.io/driver/mysql v1.4.5
-	gorm.io/gorm v1.24.3
+	gorm.io/driver/mysql v1.4.7
+	gorm.io/gorm v1.24.5
 	gorm.io/plugin/opentracing v0.0.0-20211220013347-7d2b2af23560
 )
 
@@ -35,7 +35,6 @@ require (
 	github.com/cloudwego/thriftgo v0.2.4 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.3-0.20220203105225-a9a7ef127534 // indirect
-	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -66,14 +65,14 @@ require (
 	go.etcd.io/etcd/api/v3 v3.5.5 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.5 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.5 // indirect
-	go.uber.org/atomic v1.10.0 // indirect
+	go.uber.org/atomic v1.8.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/arch v0.0.0-20220722155209-00200b7164a7 // indirect
-	golang.org/x/image v0.3.0 // indirect
-	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
-	golang.org/x/sys v0.1.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c // indirect
 	google.golang.org/grpc v1.41.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

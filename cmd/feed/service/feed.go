@@ -42,17 +42,12 @@ func (s *FeedService) FeedVideo(req *feed.DouyinFeedRequest) ([]*feed.Video, *in
 		//query IsFavorite, check whether the user is online
 		isfav := false
 		if req.Token != nil {
-			token, claim, err := middleware.ParseToken(*req.Token)
-			if err != nil {
-				return nil, req.LatestTime, err
-			}
+			token, claim, _ := middleware.ParseToken(*req.Token)
 			if token.Valid {
-				isfav, err = db.QueryFavoriteStatus(s.ctx, claim.UserID, int64(v.ID))
-				if err != nil {
-					return nil, req.LatestTime, err
-				}
+				isfav, _ = db.QueryFavoriteStatus(s.ctx, claim.UserID, int64(v.ID))
 			}
 		}
+
 		vd := feed.Video{
 			Id:            int64(v.ID),
 			Author:        &u,
@@ -60,7 +55,7 @@ func (s *FeedService) FeedVideo(req *feed.DouyinFeedRequest) ([]*feed.Video, *in
 			CoverUrl:      v.CoverUrl,
 			FavoriteCount: v.FavoriteCount,
 			CommentCount:  v.CommentCount,
-			IsFavorite:    !isfav,
+			IsFavorite:    isfav,
 			Title:         v.Title,
 		}
 		resp = append(resp, &vd)

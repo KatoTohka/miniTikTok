@@ -41,8 +41,18 @@ func (s *VideoListService) ListVideo(req *video.DouyinPublishListRequest) ([]*vi
 	if err != nil {
 		return []*video.Video{}, err
 	}
+	fVideo, _ := db.QueryFavoriteById(context.Background(), req.UserId)
+	//TODO:效率较低
+	favoriteList := make([]bool, len(videos))
+	for i, v := range videos {
+		if in(int64(v.ID), fVideo) {
+			favoriteList[i] = true
+		} else {
+			favoriteList[i] = false
+		}
+	}
 	var resp []*video.Video
-	for _, v := range videos {
+	for i, v := range videos {
 		vd := video.Video{
 			Id:            int64(v.ID),
 			Author:        &u,
@@ -50,10 +60,20 @@ func (s *VideoListService) ListVideo(req *video.DouyinPublishListRequest) ([]*vi
 			CoverUrl:      v.CoverUrl,
 			FavoriteCount: v.FavoriteCount,
 			CommentCount:  v.CommentCount,
-			IsFavorite:    false,
+			IsFavorite:    favoriteList[i],
 			Title:         v.Title,
 		}
 		resp = append(resp, &vd)
 	}
 	return resp, nil
+}
+
+// util
+func in(target int64, str_array []int64) bool {
+	for _, element := range str_array {
+		if target == element {
+			return true
+		}
+	}
+	return false
 }

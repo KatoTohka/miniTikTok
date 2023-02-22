@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"log"
 	"miniTikTok/cmd/video/dal/cache"
 	"miniTikTok/cmd/video/dal/db"
 	"miniTikTok/cmd/video/dal/tos"
@@ -34,13 +35,13 @@ func (s *VideoPublishService) PublishVideo(req *video.DouyinPublishActionRequest
 	var err error
 	go func(err error) {
 		// 协程处理tos上传video
-		err = tos.Upload(data, tosKey)
 		defer wg.Done()
+		err = tos.Upload(data, tosKey)
 	}(err)
 	playUrl := constants.TosURL + tosKey
 	go func(err error) {
-		defer wg.Done()
 		// 协程处理视频帧
+		defer wg.Done()
 		err = cache.Cache(data, int64(videoId))
 		if err != nil {
 			return
@@ -50,6 +51,7 @@ func (s *VideoPublishService) PublishVideo(req *video.DouyinPublishActionRequest
 			return
 		}
 		imgTosKey := fmt.Sprintf("%v.png", videoId)
+		log.Println(imgTosKey)
 		err = tos.Upload(imgData, imgTosKey)
 		if err != nil {
 			return

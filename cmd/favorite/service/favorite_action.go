@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"miniTikTok/cmd/favorite/dal/db"
 	"miniTikTok/kitex_gen/favorite"
 	"miniTikTok/middleware"
@@ -24,8 +25,19 @@ func (s *FavoriteActionService) ActionFavorite(req *favorite.DouyinFavoriteActio
 		UserId:  userId,
 		VideoId: req.VideoId,
 	}
+	videoList, _ := db.QueryFavoriteById(context.Background(), userId)
+	isFavorite := false
+	for _, videoid := range videoList {
+		if videoid == req.VideoId {
+			isFavorite = true
+			break
+		}
+	}
 
 	if req.ActionType == 1 {
+		if isFavorite {
+			return nil
+		}
 		if err := db.SetFavorite(context.Background(), &favorite); err != nil {
 			return err
 		}
@@ -34,7 +46,7 @@ func (s *FavoriteActionService) ActionFavorite(req *favorite.DouyinFavoriteActio
 			return err
 		}
 		return nil
-	} else {
+	} else if req.ActionType == 2 {
 		if err := db.CancelFavorite(context.Background(), &favorite); err != nil {
 			return err
 		}
@@ -43,5 +55,7 @@ func (s *FavoriteActionService) ActionFavorite(req *favorite.DouyinFavoriteActio
 			return err
 		}
 		return nil
+	} else {
+		return errors.New("param error")
 	}
 }

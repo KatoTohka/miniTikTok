@@ -39,6 +39,10 @@ func (s *CommentService) Comment(req *comment.DouyinCommentActionRequest) (*comm
 		if err != nil {
 			return &comment.Comment{}, err
 		}
+		err = db.AddCommentById(context.Background(), videoId)
+		if err != nil {
+			return &comment.Comment{}, err
+		}
 		cmt, err := db.QueryCommentById(context.Background(), commentId)
 		//log.Println("7777777", len(cmt))
 		createDate := cmt[0].CreatedAt
@@ -66,6 +70,10 @@ func (s *CommentService) Comment(req *comment.DouyinCommentActionRequest) (*comm
 	case 2:
 		commentId := req.CommentId
 		err := db.DeleteCommentById(context.Background(), uint(*commentId))
+		if err != nil {
+			return &comment.Comment{}, err
+		}
+		err = db.DecCommentById(context.Background(), videoId)
 		if err != nil {
 			return &comment.Comment{}, err
 		}
