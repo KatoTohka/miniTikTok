@@ -41,10 +41,17 @@ const (
 	CPURateLimit        float64 = 80.0
 	DefaultLimit                = 10
 
-	TempCachePlace = "/home/ydssx/miniTikTok/videoImage/"
+	RedisDefaultAddr     = "localhost:6379"
+	RedisDefaultPassWord = "111111"
+	RedisDefaultDB       = 0
+
+	TempCachePlace = "./../../videoImage/"
 
 	TosAccessKey = "g2EfdHBkRt12iIUIOwWZ3_C5JXtx9OIQtL25JLdJ"
 	TosSecretKey = "o36ZBDOqHGwymF-eDddH7Pg6stHvbpnTh9gemjPC"
-	TosBucket    = "tiktok4396"
-	TosURL       = "http://rp6phmpic.bkt.clouddn.com/"
+	//TosBucket    = "tiktok43966"
+	//TosURL       = "http://rqhdduidf.bkt.clouddn.com"
+	// 2月28日过后请使用上面的链接
+	TosBucket = "tiktok4396"
+	TosURL    = "http://rp6phmpic.bkt.clouddn.com/"
 )

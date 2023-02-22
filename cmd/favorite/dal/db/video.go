@@ -22,16 +22,16 @@ func (v *Video) TableName() string {
 	return constants.VideoTableName
 }
 
-// AddFavoriteById add video favorite count by vedio id
-func AddFavoriteById(ctx context.Context, videoId int64) error {
-	video := Video{}
-	video.ID = uint(videoId)
-	//Favorite Count + 1
-	if err := DB.WithContext(ctx).Model(&video).Update("favorite_count", gorm.Expr("favorite_count + ?", 1)).Error; err != nil {
-		return err
-	}
-	return nil
-}
+//// AddFavoriteById add video favorite count by vedio id
+//func AddFavoriteById(ctx context.Context, videoId int64) error {
+//	video := Video{}
+//	video.ID = uint(videoId)
+//	//Favorite Count + 1
+//	if err := DB.WithContext(ctx).Model(&video).Update("favorite_count", gorm.Expr("favorite_count + ?", 1)).Error; err != nil {
+//		return err
+//	}
+//	return nil
+//}
 
 // DecFavoriteById decrease video favorite count by vedio id
 func DecFavoriteById(ctx context.Context, videoId int64) error {

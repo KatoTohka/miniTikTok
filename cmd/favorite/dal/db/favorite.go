@@ -27,25 +27,25 @@ func CreateFavorite(ctx context.Context, favorite *Favorite) error {
 	return nil
 }
 
-// SetFavorite set favorite status to 0
-func SetFavorite(ctx context.Context, favorite *Favorite) error {
-	// res := Favorite{}
-	// if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).FirstOrCreate(&res).Error; err != nil {
-	// 	return err
-	// }
-	// if err := DB.Model(&res).Update("status", "0").Error; err != nil {
-	// 	return err
-	// }
-	update := map[string]interface{}{
-		"status": 1,
-	}
-	if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).Assign(update).FirstOrCreate(&Favorite{}).Error; err != nil {
-		return err
-	}
-	return nil
-}
+// SetFavorite set favorite status to 1
+//func SetFavorite(ctx context.Context, favorite *Favorite) error {
+//	// res := Favorite{}
+//	// if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).FirstOrCreate(&res).Error; err != nil {
+//	// 	return err
+//	// }
+//	// if err := DB.Model(&res).Update("status", "0").Error; err != nil {
+//	// 	return err
+//	// }
+//	update := map[string]interface{}{
+//		"status": 1,
+//	}
+//	if err := DB.Where(Favorite{UserId: favorite.UserId, VideoId: favorite.VideoId}).Assign(update).FirstOrCreate(&Favorite{}).Error; err != nil {
+//		return err
+//	}
+//	return nil
+//}
 
-// CancelFavorite set favorite status to 1
+// CancelFavorite set favorite status to 0
 func CancelFavorite(ctx context.Context, favorite *Favorite) error {
 	// if err := DB.Model(favorite).Update("status", "1").Error; err != nil {
 	// 	return err

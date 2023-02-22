@@ -1,6 +1,18 @@
 version: '3'
 
 services:
+  redis:
+    image: 'redis:6.2.10-alpine3.17'
+    container_name: redis-label
+    volumes:
+      - /apps/redis/datadir:/data
+      - /apps/redis/conf/redis.conf
+#      - /apps/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - /apps/redis/logs:/logs
+    command: redis-server --requirepass 111111
+    ports:
+
+      - 6379:6379
   mysql:
     image: 'mysql:latest'
     volumes:

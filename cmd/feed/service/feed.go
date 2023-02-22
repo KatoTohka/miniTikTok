@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"miniTikTok/cmd/feed/dal/db"
+	"miniTikTok/cmd/feed/dal/redisDb"
 	"miniTikTok/kitex_gen/feed"
 	"miniTikTok/middleware"
 	"miniTikTok/pkg/constants"
@@ -40,14 +41,30 @@ func (s *FeedService) FeedVideo(req *feed.DouyinFeedRequest) ([]*feed.Video, *in
 		u.FollowCount = &users[0].FollowCount
 		u.FollowerCount = &users[0].FollowerCount
 		//query IsFavorite, check whether the user is online
-		isfav := false
+		isFav := false
 		if req.Token != nil {
 			token, claim, _ := middleware.ParseToken(*req.Token)
 			if token.Valid {
-				isfav, _ = db.QueryFavoriteStatus(s.ctx, claim.UserID, int64(v.ID))
+				isFind, err := redisDb.RDBQueryFavoriteById(int64(v.ID), claim.UserID)
+				// redis能找到
+				if err == nil {
+					if !isFind {
+						// 进mysql
+						isFav, err = db.QueryFavoriteStatus(s.ctx, claim.UserID, int64(v.ID))
+						//	写回redis
+						if isFav {
+							_, _ = redisDb.RDBSetFavorite(int64(v.ID), claim.UserID)
+						}
+						if err != nil {
+							return nil, nil, err
+						}
+					} else {
+						isFav = true
+					}
+				}
+
 			}
 		}
-
 		vd := feed.Video{
 			Id:            int64(v.ID),
 			Author:        &u,
@@ -55,7 +72,7 @@ func (s *FeedService) FeedVideo(req *feed.DouyinFeedRequest) ([]*feed.Video, *in
 			CoverUrl:      v.CoverUrl,
 			FavoriteCount: v.FavoriteCount,
 			CommentCount:  v.CommentCount,
-			IsFavorite:    isfav,
+			IsFavorite:    isFav,
 			Title:         v.Title,
 		}
 		resp = append(resp, &vd)

@@ -3,9 +3,12 @@ package service
 import (
 	"context"
 	"errors"
+	"log"
 	"miniTikTok/cmd/favorite/dal/db"
+	"miniTikTok/cmd/favorite/dal/redisDb"
 	"miniTikTok/kitex_gen/favorite"
 	"miniTikTok/middleware"
+	"time"
 )
 
 type FavoriteActionService struct {
@@ -25,37 +28,58 @@ func (s *FavoriteActionService) ActionFavorite(req *favorite.DouyinFavoriteActio
 		UserId:  userId,
 		VideoId: req.VideoId,
 	}
-	videoList, _ := db.QueryFavoriteById(context.Background(), userId)
-	isFavorite := false
-	for _, videoid := range videoList {
-		if videoid == req.VideoId {
-			isFavorite = true
-			break
-		}
-	}
 
 	if req.ActionType == 1 {
-		if isFavorite {
-			return nil
-		}
-		if err := db.SetFavorite(context.Background(), &favorite); err != nil {
-			return err
-		}
-		if err := db.AddFavoriteById(context.Background(), req.VideoId); err != nil {
-			//没有考虑 此行为失败后对 favorite 数据的处理
+		if err := FavoriteVideo(&favorite, req); err != nil {
 			return err
 		}
 		return nil
 	} else if req.ActionType == 2 {
-		if err := db.CancelFavorite(context.Background(), &favorite); err != nil {
-			return err
-		}
-		if err := db.DecFavoriteById(context.Background(), req.VideoId); err != nil {
-			//没有考虑 此行为失败后对 favorite 数据的处理
+		if err := CancelFavoriteVideo(&favorite, req.VideoId); err != nil {
 			return err
 		}
 		return nil
 	} else {
 		return errors.New("param error")
 	}
+}
+
+func FavoriteVideo(favorite *db.Favorite, req *favorite.DouyinFavoriteActionRequest) error {
+	// 先写mysql
+	// 开启一个事务保证原子性,点赞+数量
+	if err := db.TXFavorite(context.Background(), req.VideoId, favorite); err != nil {
+		return err
+	}
+	// 再写redis
+	// 不在乎是否成功
+	_, err := redisDb.RDBSetFavorite(req.VideoId, favorite.UserId)
+	if err != nil {
+		log.Println("redis save failure")
+	}
+	return nil
+}
+
+func CancelFavoriteVideo(favorite *db.Favorite, Id int64) error {
+	// 延迟双删
+	// 先删一次redis
+	_, err := redisDb.RDBCancelFavorite(Id, favorite.UserId)
+	if err != nil {
+		log.Println("redis rem failure")
+	}
+	// 删mysql
+	// 开启一个事务保证原子性,取消点赞+减数量
+	if err := db.TXCancelFavorite(context.Background(), Id, favorite); err != nil {
+		return err
+	}
+	// TODO：可以参考raft的replicator
+	go func() {
+		time.Sleep(time.Duration(500) * time.Millisecond)
+		// 再删redis
+		_, err = redisDb.RDBCancelFavorite(Id, favorite.UserId)
+		if err != nil {
+			log.Println("redis rem failure")
+		}
+		log.Println("第二次删redis")
+	}()
+	return nil
 }
