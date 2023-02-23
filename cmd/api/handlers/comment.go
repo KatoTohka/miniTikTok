@@ -15,11 +15,11 @@ func Comment(ctx context.Context, c *app.RequestContext) {
 	hlog.Info("comment log")
 	var commentVar CommentParam
 	if err := c.Bind(&commentVar); err != nil {
-		SendCommentResponse(c, Comments{}, errno.ParamErr)
+		SendCommentResponse(c, Comments{}, errno.NewErrNo(777,"1"))
 		return
 	}
 	if len(commentVar.Token) == 0 || len(commentVar.VideoID) == 0 || len(commentVar.ActionType) == 0 {
-		SendCommentResponse(c, Comments{}, errno.ParamErr)
+		SendCommentResponse(c, Comments{}, errno.NewErrNo(777,"2"))
 		return
 	}
 	//JWT
@@ -30,7 +30,7 @@ func Comment(ctx context.Context, c *app.RequestContext) {
 	}
 	videoId, err := strconv.ParseInt(commentVar.VideoID, 10, 64)
 	if err != nil {
-		SendCommentResponse(c, Comments{}, errno.ParamErr)
+		SendCommentResponse(c, Comments{}, errno.NewErrNo(777,"3"))
 		return
 	}
 	var id int64
@@ -75,6 +75,7 @@ func Comment(ctx context.Context, c *app.RequestContext) {
 			CreateDate: cmt.CreateDate,
 		}
 		SendCommentResponse(c, comments, errno.Success)
+		return
 	}
 	SendCommentResponse(c, Comments{}, errno.Success)
 }

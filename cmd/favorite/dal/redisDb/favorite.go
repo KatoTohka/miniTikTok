@@ -21,7 +21,7 @@ func RDBSetFavorite(videoId int64, userid int64) (bool, error) {
 		return true, nil
 	}
 	//redis 不用管它
-	_, err = RDB.SAdd(context.Background(), keys, userid, 1).Result()
+	_, err = RDB.SAdd(context.Background(), keys, userid).Result()
 	if err != nil {
 		log.Println("redis set error:", err)
 		return false, err

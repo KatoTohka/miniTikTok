@@ -45,17 +45,23 @@ func (s *FavoriteActionService) ActionFavorite(req *favorite.DouyinFavoriteActio
 }
 
 func FavoriteVideo(favorite *db.Favorite, req *favorite.DouyinFavoriteActionRequest) error {
-	// 先写mysql
-	// 开启一个事务保证原子性,点赞+数量
-	if err := db.TXFavorite(context.Background(), req.VideoId, favorite); err != nil {
-		return err
-	}
-	// 再写redis
-	// 不在乎是否成功
 	_, err := redisDb.RDBSetFavorite(req.VideoId, favorite.UserId)
 	if err != nil {
 		log.Println("redis save failure")
 	}
+	// 先写mysql
+	// 开启一个事务保证原子性,点赞+数量
+	if err = db.TXFavorite(context.Background(), req.VideoId, favorite); err != nil {
+		return err
+	}
+	// 再写redis
+	go func() {
+		time.Sleep(time.Duration(500) * time.Millisecond)
+		_, err = redisDb.RDBSetFavorite(req.VideoId, favorite.UserId)
+		if err != nil {
+			log.Println("redis save failure")
+		}
+	}()
 	return nil
 }
 
