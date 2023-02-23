@@ -3,6 +3,8 @@ package redisDb
 import (
 	"context"
 	"fmt"
+	"log"
+	"time"
 )
 
 // 一个video一个set
@@ -20,6 +22,11 @@ func RDBSetFavorite(videoId int64, userid int64) (bool, error) {
 	}
 	_, err = RDB.SAdd(context.Background(), keys, userid).Result()
 	if err != nil {
+		return false, err
+	}
+	_, err = RDB.ExpireAt(context.Background(),keys, time.Now().Add(60*time.Second)).Result()
+	if err != nil {
+		log.Println("redis set error:", err)
 		return false, err
 	}
 	return true, nil
@@ -55,6 +62,11 @@ func RDBQueryFavoriteById(videoId int64, userid int64) (bool, error) {
 	}
 	res, err := RDB.SIsMember(context.Background(), keys, userid).Result()
 	if err != nil {
+		return false, err
+	}
+	_, err = RDB.ExpireAt(context.Background(),keys, time.Now().Add(60*time.Second)).Result()
+	if err != nil {
+		log.Println("redis set error:", err)
 		return false, err
 	}
 	return res, nil
