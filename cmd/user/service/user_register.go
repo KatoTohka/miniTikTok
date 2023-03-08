@@ -2,9 +2,7 @@ package service
 
 import (
 	"context"
-	"crypto/md5"
-	"fmt"
-	"io"
+	"golang.org/x/crypto/bcrypt"
 	"miniTikTok/cmd/user/dal/db"
 	"miniTikTok/kitex_gen/user"
 	"miniTikTok/pkg/errno"
@@ -33,19 +31,17 @@ func (s *UserRegisterService) RegisterUser(req *user.DouyinUserRegisterRequest) 
 		return -1, errno.UserAlreadyExistErr
 	}
 
-	// password use md5 encrypt
-	h := md5.New()
-
-	if _, err = io.WriteString(h, req.Password); err != nil {
-		return -1, err
+	// password use bcrypt 加密
+	passWord, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return -1, errno.BadReqErr
 	}
-	passWord := fmt.Sprintf("%x", h.Sum(nil))
 
 	// register
 	err = db.RegisterUser(s.ctx, []*db.User{
 		{
 			UserName: req.Username,
-			PassWord: passWord,
+			PassWord: string(passWord),
 		},
 	})
 	if err != nil {

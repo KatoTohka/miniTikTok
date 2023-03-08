@@ -2,9 +2,7 @@ package service
 
 import (
 	"context"
-	"crypto/md5"
-	"fmt"
-	"io"
+	"golang.org/x/crypto/bcrypt"
 	"miniTikTok/cmd/user/dal/db"
 	"miniTikTok/kitex_gen/user"
 	"miniTikTok/pkg/errno"
@@ -30,12 +28,8 @@ func (s *UserLoginService) CheckUser(req *user.DouyinUserLoginRequest) (int64, e
 		return -1, errno.AuthorizationFailedErr
 	}
 	u := res[0]
-	h := md5.New()
-	if _, err := io.WriteString(h, req.Password); err != nil {
-		return -1, err
-	}
-	passWord := fmt.Sprintf("%x", h.Sum(nil))
-	if u.PassWord != passWord {
+	err = bcrypt.CompareHashAndPassword([]byte(u.PassWord), []byte(req.Password))
+	if err != nil {
 		return -1, errno.AuthorizationFailedErr
 	}
 	return int64(u.ID), nil

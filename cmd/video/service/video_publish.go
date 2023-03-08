@@ -33,13 +33,16 @@ func (s *VideoPublishService) PublishVideo(req *video.DouyinPublishActionRequest
 	videoId := snow.Generate()
 	tosKey := fmt.Sprintf("%v.mp4", videoId)
 	var err error
-	go func(err error) {
+	go func() {
 		// 协程处理tos上传video
 		defer wg.Done()
 		err = tos.Upload(data, tosKey)
-	}(err)
+		if err != nil {
+			return
+		}
+	}()
 	playUrl := constants.TosURL + tosKey
-	go func(err error) {
+	go func() {
 		// 协程处理视频帧
 		defer wg.Done()
 		err = cache.Cache(data, int64(videoId))
@@ -56,10 +59,13 @@ func (s *VideoPublishService) PublishVideo(req *video.DouyinPublishActionRequest
 		if err != nil {
 			return
 		}
-	}(err)
+	}()
 	imgTosKey := fmt.Sprintf("%v.png", videoId)
 	imgUrl := constants.TosURL + imgTosKey
 	wg.Wait()
+	if err != nil {
+		return nil
+	}
 	// token already verified in api
 	_, claim, _ := middleware.ParseToken(req.Token)
 	userId := claim.UserID
