@@ -31,7 +31,7 @@ CREATE TABLE `comment`  (
   `user_id` bigint NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_comment_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7034396283762900993 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7034508385945124865 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of comment
@@ -80,12 +80,12 @@ CREATE TABLE `favorite`  (
   `created_at` datetime(3) NULL DEFAULT NULL,
   `updated_at` datetime(3) NULL DEFAULT NULL,
   `deleted_at` datetime(3) NULL DEFAULT NULL,
-  `user_id` bigint NULL DEFAULT NULL,
-  `video_id` bigint NULL DEFAULT NULL,
+  `user_id` bigint NOT NULL,
+  `video_id` bigint NOT NULL,
   `status` tinyint(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_favorite_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+  UNIQUE INDEX `idx_user_id_video_id`(`user_id` ASC, `video_id` ASC) USING BTREE COMMENT 'User id and Video id index'
+) ENGINE = InnoDB AUTO_INCREMENT = 79 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of favorite
@@ -141,9 +141,8 @@ CREATE TABLE `user`  (
   `follow_count` bigint UNSIGNED NOT NULL,
   `follower_count` bigint UNSIGNED NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `username`(`username` ASC) USING BTREE,
-  INDEX `idx_user_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+  UNIQUE INDEX `username`(`username` ASC) USING BTREE COMMENT 'Username index'
+) ENGINE = InnoDB AUTO_INCREMENT = 68 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
@@ -197,8 +196,9 @@ CREATE TABLE `video`  (
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `author_id` bigint NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_video_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+  UNIQUE INDEX `created_at`(`created_at` ASC) USING BTREE COMMENT 'created_at',
+  INDEX `idx_author_id`(`author_id` ASC) USING BTREE COMMENT 'Author id index'
+) ENGINE = InnoDB AUTO_INCREMENT = 70 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of video
